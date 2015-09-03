@@ -7,7 +7,7 @@ import (
 // WriteTo serializes the Boolean according to the rules in
 // §7.3.2
 func (b Boolean) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	if b {
 		buf.WriteString("true")
@@ -21,7 +21,7 @@ func (b Boolean) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the Integer according to the rules in
 // §7.3.3
 func (i Integer) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.Printf("%d", int(i))
 
@@ -31,7 +31,7 @@ func (i Integer) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the Real according to the rules in
 // §7.3.3
 func (r Real) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.Printf("%v", float64(r))
 
@@ -41,7 +41,7 @@ func (r Real) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the String according to the rules in
 // §7.3.4
 func (s String) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.WriteByte('(')
 	for _, b := range []byte(s) {
@@ -62,7 +62,7 @@ func (s String) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the Name according to the rules in
 // §7.3.5
 func (n Name) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.Printf("/%s", n)
 
@@ -72,7 +72,7 @@ func (n Name) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the Array according to the rules in
 // §7.3.6
 func (a Array) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.WriteByte('[')
 	for _, obj := range a {
@@ -93,7 +93,7 @@ func (a Array) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the Dictionary according to the rules in
 // §7.3.6
 func (d Dictionary) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.WriteString("<<")
 	for name, obj := range d {
@@ -115,7 +115,7 @@ func (d Dictionary) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the Stream according to the rules in
 // §7.3.8
 func (s Stream) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	// update the dictionary
 	if s.Dictionary == nil {
@@ -141,7 +141,7 @@ func (s Stream) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes Null according to the rules in
 // §7.3.9
 func (null Null) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.WriteString("null")
 
@@ -151,7 +151,7 @@ func (null Null) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the ObjectReference according to the rules in
 // §7.3.10
 func (objref ObjectReference) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 
 	buf.Printf("%d %d R", objref.ObjectNumber, objref.GenerationNumber)
 
@@ -161,7 +161,7 @@ func (objref ObjectReference) writeTo(w io.Writer) (int64, error) {
 // WriteTo serializes the IndirectObject according to the rules in
 // §7.3.10
 func (inobj IndirectObject) writeTo(w io.Writer) (int64, error) {
-	buf := &buffer{}
+	buf := newBuffer()
 	buf.Printf("%d %d obj\n", inobj.ObjectNumber, inobj.GenerationNumber)
 
 	n, err := inobj.Object.writeTo(buf)

@@ -12,6 +12,10 @@ type buffer struct {
 	err error
 }
 
+func newBuffer() *buffer {
+	return &buffer{b: bytes.NewBuffer(nil)}
+}
+
 func (b *buffer) WriteTo(w io.Writer) (int64, error) {
 	if b.err != nil {
 		return 0, b.err
