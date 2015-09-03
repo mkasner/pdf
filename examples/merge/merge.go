@@ -132,7 +132,7 @@ func copyReferencedObjects(refs map[pdf.ObjectReference]pdf.ObjectReference, dst
 			merge(newRefs)
 		}
 		obj = t
-	case pdf.Name, pdf.Integer, pdf.String, pdf.Real:
+	case pdf.Name, pdf.Integer, pdf.String, pdf.Real, pdf.Boolean:
 		// these types can't have references
 	default:
 		log.Fatalf("unhandled %T", obj)
